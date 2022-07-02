@@ -1,0 +1,5 @@
+*.pkl
+*.local
+.venv/
+.idea/
+dataset/
