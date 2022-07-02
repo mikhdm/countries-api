@@ -14,13 +14,13 @@ __all__ = (
     'settings',
 )
 
-env.read_env('.env')
+env.read_envfile('.env')
 settings = env
 
 app = FastAPI(
     title='Address resolver API',
     docs_url='/',
-    version=settings('API_VERSION', '0.0.0'),
+    version=settings('APP_VERSION', '0.0.0'),
     openapi_url='/openapi.json',
     openapi_tags=[{
         'name': 'resolver',

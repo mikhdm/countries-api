@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python /textkernel/application/__main__.py

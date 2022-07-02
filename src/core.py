@@ -1,9 +1,8 @@
 from application import app
 
-from fastapi import Request
-
 from application.src.validators import CountriesResponseSchema, ErrorSchema
 from application import META
+from application.src import errors
 from application.src.utils import prepare
 from application.src.exception import AppException
 
@@ -15,7 +14,6 @@ def predict(raw_address):
     return {
         'address': raw_address,
         'country': values[0],
-        'probability': '',
     }
 
 
@@ -25,10 +23,10 @@ def predict(raw_address):
              404: ErrorSchema,
              422: ErrorSchema,
          })
-def v_countries(request: Request, address: str = None):
+def v_countries(address: str = None):
     if not address or address is None:
         raise AppException(status_code=422,
-                           error_code=1,
+                           error_code=errors.ERR_EMPTYADDR,
                            message="Empty address")
     data = predict(address)
     return {
