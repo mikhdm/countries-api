@@ -2,12 +2,11 @@ from fastapi.testclient import TestClient
 from fastapi import status 
 
 from app.src import errors
-from app import application
-
+from app import __main__ as main
 
 
 def test_get_countries_empty():
-    with TestClient(application) as client:
+    with TestClient(main.application) as client:
         response = client.get('/countries')
     rmock = {
         'error': {
@@ -21,7 +20,7 @@ def test_get_countries_empty():
 
 def test_get_countries_usual():
     address = 'Nieuwendammerkade 26A-5, Amsterdam'
-    with TestClient(application) as client:
+    with TestClient(main.application) as client:
         response = client.get('/countries', params={'address': address})
     rmock = {
         'data': {

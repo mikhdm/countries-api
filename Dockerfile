@@ -19,8 +19,6 @@ WORKDIR /app
 COPY src ./src
 COPY commands ./commands
 COPY migrations ./migrations
-COPY dataset ./dataset
-COPY model ./model
 COPY tests ./tests
 COPY run.sh VERSION .env alembic.ini __init__.py __main__.py pytest.ini ./
 

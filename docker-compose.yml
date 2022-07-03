@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   postgres:
+    profiles: ["app", "migration"]
     image: postgres:14.2-alpine
     container_name: postgres
     networks:
@@ -22,13 +23,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
     volumes:
-      - ./:/app
-    command: /bin/bash
-    stdin_open: true
-    tty: true
-
+      - ./model:/app/model
+      - ./dataset:/app/dataset
     networks:
       - default
     restart: always

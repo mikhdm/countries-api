@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import re
+import os
 import json
 import pickle
 from typing import List, Dict, Generator, Tuple
@@ -9,11 +9,8 @@ import click
 import numpy as np
 from sklearn import svm
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import train_test_split
 
-from app import settings
-from app.commands import cli, DB 
-from app.commands.load import load
+from app.commands import cli, DB
 from app.src.utils import filtertokenize
 
 
@@ -30,59 +27,63 @@ def vocabulary(addrs: List[Dict]) -> set:
     voc = set()
     for item in prepared(addrs):
         for t in item['tokens']:
-            voc.add(t)
+            if t:
+                voc.add(t)
     return voc
 
 
 def vectorize(vectorizer: TfidfVectorizer,
-              addrs: List[Dict],
-              ) -> Tuple:
-    corpus = [item['address'] for item in addrs]
-    y = [item['country'] for item in addrs]
-    x_train, x_test, y_train, y_test = \
-        train_test_split(corpus, y, random_state=0, train_size=.7)
-    X_train = vectorizer.fit_transform(x_train)
-    X_test = vectorizer.transform(x_test)
-    return X_train, X_test, np.array(y_train), np.array(y_test)
+              train: List[Dict],
+              test: List[Dict]) -> Tuple:
+    X_train = vectorizer.fit_transform(item['address'] for item in train)
+    X_test = vectorizer.transform(item['address'] for item in test)
+    breakpoint()
+    Y_train = np.array([item['country'] for item in train])
+    Y_test = np.array([item['country'] for item in test])
+    return X_train, X_test, Y_train, Y_test
 
 
-def _from_file(filename: str) -> Generator[Dict, None, None]:
+def _read_file(filename: str) -> Generator[Dict, None, None]:
     with open(filename, mode='r') as f:
         for line in f.readlines():
             yield json.loads(line)
 
 
 @cli.command()
-@click.argument('filename', type=click.Path(exists=True))
-@click.option('--load', default=False, help='Load data into DB (JSONL file format).') 
+@click.argument('train', type=click.Path(exists=True))
+@click.argument('test', type=click.Path(exists=True))
 @click.pass_context
-def train(ctx, filename, load):
-    if load:
-        ctx.forward(load)
+def train(ctx, train, test):
+    click.echo('Contents of /app/model path: ')
+    click.echo('-----')
+    for f in os.listdir('/app/model'):
+        click.echo(f)
+    click.echo('-----')
     
     click.echo('Reading data...')
-    addrs_generator = _from_file(filename)
+    train_data = list(_read_file(train))
+    test_data = list(_read_file(test))
+    
     click.echo('Building vocabulary...')
-    addresses = list(addrs_generator)
-    voc = vocabulary(addresses)
+    voc = vocabulary(train_data)
     if not voc:
         raise click.ClickException('File is empty')
 
     vec = TfidfVectorizer(vocabulary=voc)
-    X_train, X_test, Y_train, Y_test = vectorize(vec, addresses)
+    X_train, X_test, Y_train, Y_test = vectorize(vec, train_data, test_data)
     model = svm.LinearSVC()
     click.echo('Fitting...')
     model.fit(X_train, Y_train)
     click.echo('Validating...')
     Y_predict = model.predict(X_test)
     accuracy = np.mean(Y_predict == Y_test)
-    click.echo(f'Accuracy: {accuracy}')
+    click.echo(f'Accuracy: {accuracy:.2f}')
     
     click.echo('Saving estimator...')
-    with open('../model/estimator.test.pkl', mode='wb') as ef:
+    with open('/app/model/estimator.pkl', mode='wb+') as ef:
         pickle.dump(model, ef)
     click.echo('Saving vectorizer...')
-    with open('../model/vectorizer.test.pkl', mode='wb') as vf:
+    with open('/app/model/vectorizer.pkl', mode='wb+') as vf:
         pickle.dump(vec, vf)
 
 

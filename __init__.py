@@ -43,15 +43,25 @@ async def startup():
     url = URL.create('postgresql+asyncpg', **params)
     db = create_async_engine(url, echo=True)
     
-    async with aiofiles.open('./model/estimator.pkl', mode='rb') as ef:
-        estimator = await ef.read()
-    async with aiofiles.open('./model/vectorizer.pkl', mode='rb') as vf:
-        vectorizer = await vf.read()
+    estimator, vectorizer = None, None
+    try:
+        async with aiofiles.open('./model/estimator.pkl', mode='rb') as ef:
+            estimator = await ef.read()
+    except FileNotFoundError:
+        pass
+    
+    try:
+        async with aiofiles.open('./model/vectorizer.pkl', mode='rb') as vf:
+            vectorizer = await vf.read()
+    except FileNotFoundError:
+        pass
 
     META['engine'] = db 
     META['connection'] = await db.connect()
-    META['estimator'] = pickle.loads(estimator)
-    META['vectorizer'] = pickle.loads(vectorizer)
+    
+    if estimator and vectorizer:
+        META['estimator'] = pickle.loads(estimator)
+        META['vectorizer'] = pickle.loads(vectorizer)
 
 
 @application.on_event('shutdown')
