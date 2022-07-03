@@ -1,10 +1,10 @@
-from application import app
+from app import application
 
-from application.src.validators import CountriesResponseSchema, ErrorSchema
-from application import META
-from application.src import errors
-from application.src.utils import prepare
-from application.src.exception import AppException
+from app.src.validators import CountriesResponseSchema, ErrorSchema
+from app import META
+from app.src import errors
+from app.src.utils import prepare
+from app.src.exception import AppException
 
 
 def predict(raw_address):
@@ -17,7 +17,7 @@ def predict(raw_address):
     }
 
 
-@app.get('/countries',
+@application.get('/countries',
          response_model=CountriesResponseSchema,
          responses={
              404: ErrorSchema,

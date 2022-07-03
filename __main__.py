@@ -1,14 +1,15 @@
 import uvicorn
 
-from application import app, settings
+from app import application, settings
 
 
 if __name__ == '__main__':
     params = {
         'host': settings('APP_HOST'),
         'port': settings('APP_PORT'),
-        'log_level': 'warn',
+        'log_level': 'warning',
     }
-    uvicorn.run(app, **params)
+    print(params)
+    uvicorn.run(application, **params)
 
  

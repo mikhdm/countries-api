@@ -21,6 +21,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+
     networks:
       - default
     restart: always
@@ -33,6 +39,9 @@ services:
       APP_HOST: ${APP_HOST}
       APP_PORT: ${APP_PORT}
       APP_VERSION: ${APP_VERSION}
+      ALEMBIC_CONFIG: ${ALEMBIC_CONFIG}
+    ports:
+      - ${APP_PORT}:${APP_PORT}
     depends_on:
       - postgres
   migrate:
@@ -54,7 +63,5 @@ services:
       APP_PORT: ${APP_PORT}
       APP_VERSION: ${APP_VERSION}
       ALEMBIC_CONFIG: ${ALEMBIC_CONFIG}
-    ports:
-      - ${APP_PORT}:${APP_PORT}
     depends_on:
       - postgres

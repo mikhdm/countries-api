@@ -6,8 +6,8 @@ from sqlalchemy.engine import URL
 from sqlalchemy import create_engine
 from sqlalchemy import select
 
-from application.src.db import country, address
-from application import settings
+from app.src.db import country, address
+from app import settings
 
 params = {
     'host': settings('DB_HOST'),

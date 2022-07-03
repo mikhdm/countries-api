@@ -6,18 +6,19 @@ from fastapi import FastAPI, Request, Response
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.engine import URL
 
-from application.src.exceptions import AppException
-from application.src.utils import error_response
+from app.src.exceptions import AppException
+from app.src.utils import error_response
 
 __all__ = (
-    'app',
+    'application',
     'settings',
+    'META',
 )
 
 env.read_envfile('.env')
 settings = env
 
-app = FastAPI(
+application = FastAPI(
     title='Address resolver API',
     docs_url='/',
     version=settings('APP_VERSION', '0.0.0'),
@@ -30,7 +31,7 @@ app = FastAPI(
 META = {}
 
 
-@app.on_event('startup')
+@application.on_event('startup')
 async def startup():
     params = {
         'host': settings('DB_HOST'),
@@ -39,7 +40,7 @@ async def startup():
         'password': settings('DB_PASS'),
         'database': settings('DB_NAME'),
     }
-    url = URL.create('postgres+asyncpg', **params)
+    url = URL.create('postgresql+asyncpg', **params)
     db = create_async_engine(url, echo=True)
     
     async with aiofiles.open('./model/estimator.pkl', mode='rb') as ef:
@@ -52,13 +53,13 @@ async def startup():
     META['vectorizer'] = pickle.loads(vectorizer)
 
 
-@app.on_event('shutdown')
+@application.on_event('shutdown')
 async def shutdown():
     if 'connection' in META:
         await META['connection'].dispose()
         
 
-@app.exception_handler(AppException)
+@application.exception_handler(AppException)
 async def auth_exception_handler(rq: Request, exc: AppException) -> Response:
     return error_response(status_code=exc.status_code,
                           error_code=exc.error_code,
