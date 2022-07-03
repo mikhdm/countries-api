@@ -14,7 +14,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt update -y \
     && DEBIAN_FRONTEND=noninteractive apt upgrade -y \
     && mkdir -p /app
 
-COPY --from=build /app/venv /app/venv
+COPY --from=build /app/venv /venv
 WORKDIR /app
 
 COPY src ./src

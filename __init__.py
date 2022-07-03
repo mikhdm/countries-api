@@ -19,13 +19,13 @@ env.read_envfile('.env')
 settings = env
 
 application = FastAPI(
-    title='Address resolver API',
+    title='Countries API',
     docs_url='/',
-    version=settings('APP_VERSION', '0.0.0'),
+    version=settings.str('APP_VERSION', default='0.0.0'),
     openapi_url='/openapi.json',
     openapi_tags=[{
-        'name': 'resolver',
-        'description': 'Address resolver API',
+        'name': 'countries',
+        'description': 'Countries API',
     }])
 
 META = {}
@@ -35,7 +35,7 @@ META = {}
 async def startup():
     params = {
         'host': settings('DB_HOST'),
-        'port': settings('DB_PORT'),
+        'port': settings('DB_PORT', cast=int),
         'username': settings('DB_USER'),
         'password': settings('DB_PASS'),
         'database': settings('DB_NAME'),
@@ -47,7 +47,8 @@ async def startup():
         estimator = await ef.read()
     async with aiofiles.open('./model/vectorizer.pkl', mode='rb') as vf:
         vectorizer = await vf.read()
-        
+
+    META['engine'] = db 
     META['connection'] = await db.connect()
     META['estimator'] = pickle.loads(estimator)
     META['vectorizer'] = pickle.loads(vectorizer)
@@ -56,7 +57,7 @@ async def startup():
 @application.on_event('shutdown')
 async def shutdown():
     if 'connection' in META:
-        await META['connection'].dispose()
+        await META['engine'].dispose()
         
 
 @application.exception_handler(AppException)
