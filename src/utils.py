@@ -1,9 +1,9 @@
 import re
 import sys
 import time
-from typing import List, Dict
+from typing import List
 
-from fastapi import Response, status
+from fastapi import Response
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 
@@ -31,15 +31,6 @@ def filtertokenize(address: str) -> List[str]:
     return list(filter(cond, tokens))
     
     
-def prepared(data: List[Dict]) -> List[Dict]:
-    for item in data:
-        yield {
-            'address': item['address'],
-            'tokens': filtertokenize(item['address']),
-            'country': item['country'],
-        }
-
-
 def error_response(status_code: int, error_code: int, message: str) -> Response:
     data = {
         'error': {
