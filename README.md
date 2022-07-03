@@ -86,4 +86,4 @@ This command assumes to be useful for production to quickly load address and cou
  
 This application runs with uvicorn as a main server by default, but for production\
 it s be put under some kind of a reverse proxy like nginx, traefik (which feels much better) or envoy and multiplied on a several process instances.
-Blue-green deployment to seamless reload should be applied as well.
+Blue-green deployment to seamless reload should be applied and some kind of monitoring and alerting as well.
