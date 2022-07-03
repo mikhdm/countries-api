@@ -55,7 +55,10 @@ Train and test data must be provided via `TRAIN_PATH` and `TEST_PATH` variables,
 ```
     $ TRAIN_PATH=/app/dataset/addresses.jsonl TEST_PATH=/app/dataset/cities.test.jsonl make train
 ```
-file format should be `jsonl` with at least `address` and `country` keys.\
+
+- File format should be `jsonl` with at least `address` and `country` keys;
+- File path should be a **path to a file inside a container**.
+
 This command could be used for updating of pretrained model with new data, you need to update existing addresses.jsonl data\
 with extended version and then provide file for training and validation. News files should be put into `dataset` folder.\
 This folder is shared with running app container to provide any data for training and validation. Newly trained model will appear\
@@ -66,8 +69,20 @@ File to load data must be provided via `LOAD_PATH` env variable, e. g.
 ```
     $ LOAD_PATH=/app/dataset/addresses.jsonl make load
 ```
-File format must be `jsonl` with at least `address` and `country` keys. This command assumes to be useful for production
-to quickly load address and country data into database.
+
+- File format must be `jsonl` with at least `address` and `country` keys;
+- File path should be a **path to a file inside a container** (`dataset` and `model` folders are shared with running container).
+
+This command assumes to be useful for production to quickly load address and country data into database.
+ 
 This application runs with uvicorn as a main server by default, but for production\
 it s be put under some kind of a reverse proxy like nginx, traefik (which feels much better) or envoy and multiplied on a several process instances.
 Blue-green deployment to seamless reload should be applied as well.
+
+To quickly try and run service on a system\
+it should have docker installed (on Linux) or Docker Desktop (on MacOS).
+`make` utility must be present as well.
+
+If both of tools are installed open a Terminal and staying inside the root of the project run:
+`make up` and then locate to http://localhost:8090/ you will see swagger docs.\
+You can try query right away from swagger interactive docs, it works. To stop containers run `make down`.

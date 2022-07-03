@@ -14,6 +14,12 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
+    healthcheck:
+      test: pg_isready -U pg -d addresses
+      interval: 20s
+      timeout: 20s
+      start_period: 10s
+      retries: 5
     ports:
       - ${DB_PORT}:${DB_PORT}
   app:
@@ -42,7 +48,8 @@ services:
     ports:
       - ${APP_PORT}:${APP_PORT}
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
   migrate:
     profiles: ["migration"]
     image: app:v${APP_VERSION}
@@ -64,4 +71,5 @@ services:
       APP_VERSION: ${APP_VERSION}
       ALEMBIC_CONFIG: ${ALEMBIC_CONFIG}
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
