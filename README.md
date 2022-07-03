@@ -2,11 +2,11 @@
 
 #### Quick start
 
-To quickly try and run service on a system it should have docker installed (on Linux) or Docker Desktop (on MacOS).
+To quickly try and run service on a system it should have `docker` installed (on Linux) or Docker Desktop (on MacOS).
 `make` utility must be present as well.
 
 If both of tools are installed open a Terminal and staying inside the root of the project run:
-`make up` and then locate to http://localhost:8090/ you will see swagger docs.\
+`make up` and then locate to `http://localhost:8090/` you will see swagger docs.\
 You can try query right away from swagger interactive docs, it works. To stop containers run `make down`.
 To run tests just run `make test`. To run training of new estimator view [description](#test--run) of `make train` command in **Test & run** section.
 
