@@ -16,6 +16,7 @@ services:
     ports:
       - ${DB_PORT}:${DB_PORT}
   app:
+    profiles: ["app"]
     image: app:v${APP_VERSION}
     container_name: app
     build:
@@ -46,6 +47,7 @@ services:
     depends_on:
       - postgres
   migrate:
+    profiles: ["migration"]
     image: app:v${APP_VERSION}
     container_name: migrate
     build:

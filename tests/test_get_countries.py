@@ -4,11 +4,11 @@ from fastapi import status
 from app.src import errors
 from app import application
 
-client = TestClient(application)
 
 
 def test_get_countries_empty():
-    response = client.get('/countries')
+    with TestClient(application) as client:
+        response = client.get('/countries')
     rmock = {
         'error': {
             'message': 'Empty address',
@@ -21,12 +21,12 @@ def test_get_countries_empty():
 
 def test_get_countries_usual():
     address = 'Nieuwendammerkade 26A-5, Amsterdam'
-    response = client.get('/countries', params={'address': address}) 
+    with TestClient(application) as client:
+        response = client.get('/countries', params={'address': address})
     rmock = {
         'data': {
             'country': 'NL',
         }
     }
-
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == rmock

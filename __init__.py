@@ -56,8 +56,10 @@ async def startup():
 
 @application.on_event('shutdown')
 async def shutdown():
-    if 'connection' in META:
+    if 'engine' in META:
         await META['engine'].dispose()
+    if 'connection' in META:
+        await META['connection'].close()
         
 
 @application.exception_handler(AppException)
