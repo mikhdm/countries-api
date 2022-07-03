@@ -8,24 +8,16 @@ from sqlalchemy import select
 
 from app.src.db import country, address
 from app import settings
-
-params = {
-    'host': settings('DB_HOST'),
-    'port': settings('DB_PORT'),
-    'username': settings('DB_USER'),
-    'password': settings('DB_PASS'),
-    'database': settings('DB_NAME'),
-}
+from app.commands import cli, DB
 
 
-@click.command()
-@click.option('--addresses', help='Addresses file path (JSONL format).')
-def load(addresses):
-    
-    url = URL.create('postgresql', **params)
+@cli.command()
+@click.argument('filename', type=click.Path(exists=True))
+def load(filename):
+    url = URL.create('postgresql', **DB)
     engine = create_engine(url)
     
-    with open(addresses, 'r') as af:
+    with open(filename, 'r') as af:
         addrs = [json.loads(a) for a in af.readlines()]
 
     codes = filter(lambda v: v, {addr['country'] for addr in addrs})
