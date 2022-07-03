@@ -37,7 +37,6 @@ def vectorize(vectorizer: TfidfVectorizer,
               test: List[Dict]) -> Tuple:
     X_train = vectorizer.fit_transform(item['address'] for item in train)
     X_test = vectorizer.transform(item['address'] for item in test)
-    breakpoint()
     Y_train = np.array([item['country'] for item in train])
     Y_test = np.array([item['country'] for item in test])
     return X_train, X_test, Y_train, Y_test
