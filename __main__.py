@@ -2,6 +2,7 @@ import uvicorn
 
 from application import app, settings
 
+
 if __name__ == '__main__':
     params = {
         'host': settings('APP_HOST'),
@@ -9,4 +10,5 @@ if __name__ == '__main__':
         'log_level': 'warn',
     }
     uvicorn.run(app, **params)
-    
+
+ 

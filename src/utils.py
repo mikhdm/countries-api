@@ -48,4 +48,3 @@ def error_response(status_code: int, error_code: int, message: str) -> Response:
         }
     }
     return JSONResponse(status_code=status_code, content=jsonable_encoder(data))
-

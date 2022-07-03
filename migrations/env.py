@@ -37,7 +37,7 @@ def url(as_string=False) -> Union[str, URL]:
         'port': settings('DB_PORT'),
         'database': settings('DB_NAME')
     }
-    dburl = URL.create('postgres+psycopg2', **params)
+    dburl = URL.create('postgresql', **params)
     if as_string:
         return dburl.render_as_string(hide_password=False)
     return dburl
@@ -59,6 +59,8 @@ def run_migrations_offline() -> None:
         url=url(as_string=True),
         target_metadata=target_metadata,
         literal_binds=True,
+        compare_type=True,
+        compare_server_default=True,
         dialect_opts={"paramstyle": "named"},
     )
 

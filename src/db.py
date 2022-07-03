@@ -18,20 +18,9 @@ metadata = MetaData(naming_convention=convention)
 country = Table('country', metadata,
                 Column('id',
                        Integer, primary_key=True),
-                Column('label', String),
-                Index('label', 'label',
-                      postgresql_using='hash', postgresql_concurrently=True))
+                Column('label', String, unique=True),
+                Index('ix_country_label', 'label', postgresql_using='hash'))
 
-city = Table('city', metadata,
-             Column('id',
-                    Integer, primary_key=True),
-             Column('name', String),
-             Column('country_id',
-                    Integer,
-                    ForeignKey("country.id", ondelete="SET NULL"),
-                    nullable=True),
-             Index('name', 'name',
-                   postgresql_using='hash', postgresql_concurrenly=True))
 
 address = Table('address', metadata,
                 Column('id',

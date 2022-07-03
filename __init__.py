@@ -42,9 +42,9 @@ async def startup():
     url = URL.create('postgres+asyncpg', **params)
     db = create_async_engine(url, echo=True)
     
-    async with aiofiles.open('estimator.pkl', mode='rb') as ef:
+    async with aiofiles.open('./model/estimator.pkl', mode='rb') as ef:
         estimator = await ef.read()
-    async with aiofiles.open('vectorizer.pkl', mode='rb') as vf:
+    async with aiofiles.open('./model/vectorizer.pkl', mode='rb') as vf:
         vectorizer = await vf.read()
         
     META['connection'] = await db.connect()
@@ -57,7 +57,6 @@ async def shutdown():
     if 'connection' in META:
         await META['connection'].dispose()
         
-
 
 @app.exception_handler(AppException)
 async def auth_exception_handler(rq: Request, exc: AppException) -> Response:
