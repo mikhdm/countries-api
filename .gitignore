@@ -1,4 +1,3 @@
-*.pkl
 *.local
 .venv/
 .idea/
