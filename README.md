@@ -1,5 +1,15 @@
 ### Countries API
 
+#### Quick start
+
+To quickly try and run service on a system it should have docker installed (on Linux) or Docker Desktop (on MacOS).
+`make` utility must be present as well.
+
+If both of tools are installed open a Terminal and staying inside the root of the project run:
+`make up` and then locate to http://localhost:8090/ you will see swagger docs.\
+You can try query right away from swagger interactive docs, it works. To stop containers run `make down`.
+To run tests just run `make test`. To run training of new estimator view [description](#test--run) of `make train` command in **Test & run** section.
+
 #### Description
 Countries API uses linear support vector classification model to make predictions.\
 Achieved accuracy on a validation set is around `0.82`.\
@@ -77,13 +87,3 @@ This command assumes to be useful for production to quickly load address and cou
 This application runs with uvicorn as a main server by default, but for production\
 it s be put under some kind of a reverse proxy like nginx, traefik (which feels much better) or envoy and multiplied on a several process instances.
 Blue-green deployment to seamless reload should be applied as well.
-
-### Quick start
-
-To quickly try and run service on a system it should have docker installed (on Linux) or Docker Desktop (on MacOS).
-`make` utility must be present as well.
-
-If both of tools are installed open a Terminal and staying inside the root of the project run:
-`make up` and then locate to http://localhost:8090/ you will see swagger docs.\
-You can try query right away from swagger interactive docs, it works. To stop containers run `make down`.
-To run tests just run `make test`. To run training of new estimator view [description](#test--run) of `make train` command in **Test & run** section.
