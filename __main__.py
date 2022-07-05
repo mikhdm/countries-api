@@ -13,7 +13,7 @@ from app.src.core import predict
              404: {'model': ErrorSchema},
              422: {'model': ErrorSchema},
          })
-def v_countries(address: str = None):
+async def v_countries(address: str = None):
     if not address or address is None:
         raise AppException(status_code=422,
                            error_code=errors.ERR_EMPTYADDR,
