@@ -43,6 +43,7 @@ to reduce the size of the vocabulary and concentrate the model on more meaningfu
 ```
 
 ## Test & Run
+
 Available tests test only the basic logic of a query. For production, tests must be moved into a separate DB and app context\
 and run independently of the main application.
 Some stress testing should also be applied with the locust library, for example.\
