@@ -12,7 +12,7 @@ To run tests, just run `make test`. To run training of new estimator view [descr
 
 ## Description
 
-This project illustrates a possible approach to deploying a machine learning model as a FastAPI microservice.\
+This project illustrates a possible approach to deploying a machine learning model as a FastAPI microservice. API provides the only endpoint `GET /countries` that receives an address as a query parameter and returns the country code it was able to derive.\
 API uses a linear support vector classification model to make predictions.\
 Every address provided in the dataset was transformed into a vector of features, where every feature is a tf-idf measure of a term from a vocabulary built from all tokens in addresses.\
 During preparation of a vocabulary, several streets and postcodes were removed (if a number, or street number was considered as a token)\
