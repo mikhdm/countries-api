@@ -2,7 +2,7 @@
 
 ## Quick start
 
-To quickly try and run a service on an operating system, it should have `docker` installed (on Linux) or Docker Desktop (on macOS).
+To quickly try and run a service, the host OS should have `docker` installed (on Linux) or Docker Desktop (on macOS).
 `make` utility must be present as well.
 
 If both of the tools are installed, open a Terminal and, staying inside the root of the project, run:
