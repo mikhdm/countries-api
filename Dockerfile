@@ -1,4 +1,4 @@
-FROM python:3.9.13-buster as build
+FROM python:3.11.9-bullseye as build
 
 RUN python -m venv venv &&  \
     /venv/bin/pip install -U pip
@@ -6,10 +6,10 @@ RUN python -m venv venv &&  \
 COPY requirements.txt ./
 RUN /venv/bin/pip install -Ur requirements.txt
 
-FROM python:3.9.13-slim-buster as app
+FROM python:3.11.9-slim-bullseye as app
 
-RUN DEBIAN_FRONTEND=noninteractive apt update -y \
-    && DEBIAN_FRONTEND=noninteractive apt upgrade -y \
+RUN apt update -y \
+    && apt upgrade -y \
     && mkdir -p /app
 
 COPY --from=build /venv /venv
