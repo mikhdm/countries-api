@@ -1,6 +1,6 @@
-### Countries API
+Countries API
 
-#### Quick start
+## Quick start
 
 To quickly try and run service on a system it should have `docker` installed (on Linux) or Docker Desktop (on MacOS).
 `make` utility must be present as well.
@@ -10,7 +10,7 @@ If both of tools are installed open a Terminal and staying inside the root of th
 You can try query right away from swagger interactive docs, it works. To stop containers run `make down`.
 To run tests just run `make test`. To run training of new estimator view [description](#test--run) of `make train` command in **Test & run** section.
 
-#### Description
+## Description
 Countries API uses linear support vector classification model to make predictions.\
 Achieved accuracy on a validation set is around `0.82`.\
 To achieve better results one could use [huggingface transformers library](https://huggingface.co/docs/transformers/tasks/sequence_classification),
@@ -21,7 +21,7 @@ During preparation of a vocabulary numbers of streets and postcodes was removed 
 to reduce size of vocabulary and concentrate model on a more meaningful information such as cities, countries and street names.
 
 
-#### API:
+## API:
 
 `GET /countries?address=<address>`
 
@@ -44,7 +44,7 @@ to reduce size of vocabulary and concentrate model on a more meaningful informat
 }
 ```
 
-#### Test & Run
+## Test & Run
 Available tests test only basic logic of a query. For production tests must be moved into separated DB and app context\
 and run independently of main application.
 Some stress testing should be applied also with locust library for example.\
